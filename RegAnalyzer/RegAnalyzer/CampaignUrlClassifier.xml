@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CampaignUrlClassifierList xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ClassifierList Pattern="www.facebook.com/ILIAT.Education" Type="Facebook" Subtype="Fanpage" Tag="ILIAT Education" />
+  <ClassifierList Pattern="www.facebook.com/learnGMATtogether" Type="Facebook" Subtype="Fanpage" Tag="Learn GMAT Together" />
+  <ClassifierList Pattern="www.facebook.com/FinanceEssentials.Reasy123" Type="Facebook" Subtype="Fanpage" Tag="Finance Essentials Reasy 123" />
+  
+  <ClassifierList Pattern="www.facebook.com/groups/522880067816510" Type="Facebook" Subtype="Group" Tag="Chìa khóa FTU" />
+  <ClassifierList Pattern="www.facebook.com/groups/GocHocTapNEU" Type="Facebook" Subtype="Group" Tag="Góc học tập NEU" />
+  <ClassifierList Pattern="www.facebook.com/groups/gochoctap.nuce" Type="Facebook" Subtype="Group" Tag="Góc học tập NUCE" />
+  <ClassifierList Pattern="www.facebook.com/groups/englishdepartment.vuc" Type="Facebook" Subtype="Group" Tag="English department VUC" />
+  <ClassifierList Pattern="www.facebook.com/groups/k57kinhtequocdan" Type="Facebook" Subtype="Group" Tag="K57 Kinh tế quốc dân" />
+  <ClassifierList Pattern="www.facebook.com/groups/k51daihocthuongmai" Type="Facebook" Subtype="Group" Tag="K51 Đại học Thương Mại" />
+  <ClassifierList Pattern="www.facebook.com/groups/ueb.vnu" Type="Facebook" Subtype="Group" Tag="UEB VNU" />
+</CampaignUrlClassifierList>

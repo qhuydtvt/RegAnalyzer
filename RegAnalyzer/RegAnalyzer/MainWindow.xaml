@@ -1,0 +1,229 @@
+﻿<Window x:Class="RegAnalyzer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RegAnalyzer"
+        xmlns:vm="clr-namespace:RegAnalyzer.ViewModels"
+        xmlns:charing="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        mc:Ignorable="d"
+        FontFamily="Cambria"
+        FontSize="14"
+        Width="800"
+        Height="500"
+        WindowState="Maximized"
+        Title="MainWindow">
+    <Window.Resources>
+        <vm:MainVM x:Key="mainVM"/>
+    </Window.Resources>
+    <Grid Name="layoutRoot" DataContext="{Binding Source={StaticResource mainVM}}">
+        <TabControl>
+            <TabItem Header="Campaign">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Padding="4" Grid.Row="0" BorderThickness="0" 
+                                    DataContext="{Binding CampaignListVM}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBox MinWidth="150" Text="{Binding CampaignNameInput}" Margin="0,2"/>
+                                        <Button Content="New" MinWidth="70" MaxWidth="100" Margin="0,2"
+                                                Command="{Binding CmdAddNewCampagin}"/>
+                                        <Button Content="Remove"  MinWidth="70" MaxWidth="100" Margin="0,2"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <ListView Name="ltvCampaign"
+                                    Grid.Row="1" DataContext="{Binding CampaignListVM}"
+                                          ItemsSource="{Binding VMs}"
+                                          DisplayMemberPath="Name">
+                                </ListView>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="1" DataContext="{Binding SelectedValue, ElementName=ltvCampaign}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Button Name="btnGenerateLinks" DataContext="{Binding SelectedValue, ElementName=ltvCampaign}"
+                                Command="{Binding CmdGenerateLinks}"
+                                Grid.Row="0" Content="Generate links"
+                                Margin="5" Height="25" />
+                            <DataGrid Grid.Row="1" ItemsSource="{Binding CampaignUrlCollection, Mode=TwoWay}" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Source" Binding="{Binding SourceUrl}" Width="150"/>
+                                    <DataGridTextColumn Header="Url" Binding="{Binding Url}" Width="200"/>
+                                    <DataGridTextColumn Header="Shortened Url" Binding="{Binding ShortenedUrl}" Width="80"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Grid>
+                    
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Register data">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+                        <Label Content="Select campaign" Margin="10,0"/>
+                        <ComboBox Name="cbxCampaign" Margin="10,0"
+                              DataContext="{Binding CampaignListVM}"
+                              ItemsSource="{Binding VMs}"
+                              SelectedValue="{Binding SeletedCampaignVM}"
+                                  MinWidth="120"
+                              DisplayMemberPath="Name">
+                        </ComboBox>
+                        <Button Content="Download"
+                                Margin="10,0"
+                                MinWidth="240"
+                                Command="{Binding CmdLoadRegisterData}"/>
+                    </StackPanel>
+                    
+
+                    <TabControl Grid.Row="1">
+                        <TabItem Header="Statistics" DataContext="{Binding RegisterInsightVM}">
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                                <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <charing:Chart Grid.Row="0" Grid.Column="0" Margin="5"
+                                    Title="Facebook vs Web" MinHeight="300">
+                                    <charing:PieSeries
+                                        
+                                    ItemsSource="{Binding RegisterStatsBySourceType, Mode=OneWay}"
+                                    IndependentValueBinding="{Binding Path=Source}"
+                                    DependentValueBinding="{Binding Path=Count}">
+                                    </charing:PieSeries>
+                                </charing:Chart>
+
+                                <charing:Chart Grid.Row="0" Grid.Column="1" Margin="5" MinHeight="300"
+                                    Title="Facebook">
+                                    <charing:PieSeries
+                                    ItemsSource="{Binding RegisterStatsFromFB, Mode=OneWay}"
+                                    IndependentValueBinding="{Binding Path=Source}"
+                                    DependentValueBinding="{Binding Path=Count}">
+                                    </charing:PieSeries>
+                                </charing:Chart>
+
+                                <charing:Chart Grid.Row="1" Grid.Column="0" Margin="5" MinHeight="300"
+                                    Title="Web">
+                                    <charing:PieSeries
+                                    ItemsSource="{Binding RegisterStatsFromWeb, Mode=OneWay}"
+                                    IndependentValueBinding="{Binding Path=Source}"
+                                    DependentValueBinding="{Binding Path=Count}">
+                                    </charing:PieSeries>
+                                </charing:Chart>
+
+                                <charing:Chart Grid.Row="1" Grid.Column="1" Margin="5" MinHeight="300"
+                                    Title="Facebook fanpage">
+                                    <charing:PieSeries
+                                    ItemsSource="{Binding RegisterStatsFromFBFanpage, Mode=OneWay}"
+                                    IndependentValueBinding="{Binding Path=Source}"
+                                    DependentValueBinding="{Binding Path=Count}">
+                                    </charing:PieSeries>
+                                </charing:Chart>
+
+                                <charing:Chart Grid.Row="2" Grid.Column="0" Margin="5" MinHeight="300"
+                                    Title="Facebook group">
+                                    <charing:PieSeries
+                                    ItemsSource="{Binding RegisterStatsFromFBGroup, Mode=OneWay}"
+                                    IndependentValueBinding="{Binding Path=Source}"
+                                    DependentValueBinding="{Binding Path=Count}">
+                                    </charing:PieSeries>
+                                </charing:Chart>
+
+                                <charing:Chart Grid.Row="2" Grid.Column="1" Margin="5" MinHeight="300"
+                                    Title="Personal facebok">
+                                        <charing:PieSeries
+                                    ItemsSource="{Binding RegisterStatsFromFBPersonal, Mode=OneWay}"
+                                    IndependentValueBinding="{Binding Path=Source}"
+                                    DependentValueBinding="{Binding Path=Count}">
+                                        </charing:PieSeries>
+                                </charing:Chart>
+                                </Grid>
+                            </ScrollViewer>
+                        </TabItem>
+
+                        <TabItem Header="Time &amp; Counts">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Top"
+                                        DataContext="{Binding ClickCountData,Mode=OneWay}">
+                                    <Label Content="Click counts:"/>
+                                    <Label Content="{Binding Count}"/>
+                                </StackPanel>
+                                <charing:Chart Title="Submitted time" MinHeight="300" DataContext="{Binding RegisterInsightVM}">
+                                    <charing:ColumnSeries ItemsSource="{Binding RegisterStatsByTime, Mode=OneWay}"
+                                                          Title="Submision counts"
+                                                       IndependentValuePath="Time"
+                                                       DependentValuePath="Count">
+                                    </charing:ColumnSeries>
+                                </charing:Chart>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="All data">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <DataGrid Grid.Row="1" DataContext="{Binding RegisterInsightVM}" 
+                              ItemsSource="{Binding ListOfRegisterData}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False" >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="First name" Binding="{Binding FirstName}"/>
+                                        <DataGridTextColumn Header="Last name" Binding="{Binding LastName}"/>
+                                        <DataGridTextColumn Header="Facebook" Binding="{Binding Facebook}"/>
+                                        <DataGridTextColumn Header="Source" Binding="{Binding Source}"/>
+                                        <DataGridTextColumn Header="Source type" Binding="{Binding SourceType}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+
+                        </TabItem>
+
+                    </TabControl>
+                </Grid>
+                
+            </TabItem>
+        </TabControl>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>-->
+        
+        
+    </Grid>
+</Window>
