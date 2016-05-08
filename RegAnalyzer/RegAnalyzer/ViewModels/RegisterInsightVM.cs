@@ -11,7 +11,15 @@ namespace RegAnalyzer.ViewModels
     public class RegisterInsightVM : BaseVM
     {
         public List<RegisterData> ListOfRegisterData { get; private set; }
-        
+
+        public int SubmissionCount
+        {
+            get {
+                if (ListOfRegisterData == null) return 0;
+                else return ListOfRegisterData.Count();
+            }
+        }
+
         public ObservableCollection<RegisterStatBySource> RegisterStatsBySourceType { get; private set; }
 
         public ObservableCollection<RegisterStatBySource> RegisterStatsFromWeb { get; private set; }
@@ -111,6 +119,7 @@ namespace RegAnalyzer.ViewModels
             _notify("RegisterStatsFromFBGroup");
             _notify("RegisterStatsFromFBPersonal");
             _notify("RegisterStatsByTime");
+            _notify("SubmissionCount");
             Console.WriteLine("Done");
         }
     }

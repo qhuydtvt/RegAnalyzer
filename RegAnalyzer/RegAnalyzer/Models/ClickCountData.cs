@@ -8,20 +8,12 @@ namespace RegAnalyzer.Models
 {
     public class ClickCountData
     {
-        [JsonProperty(PropertyName = "count")]
+        [JsonProperty(PropertyName = "click_counts")]
         public int Count { get; set; }
 
-        private static ClickCountData inst;
-        public static ClickCountData Inst
+        public static ClickCountData ParseFromJson(string json)
         {
-            get
-            {
-                if(inst == null)
-                {
-                    inst = new ClickCountData();
-                }
-                return inst;
-            }
+            return JsonConvert.DeserializeObject<ClickCountData>(json);
         }
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CourseUrlList xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CourseUrl Name="IELTS" RegUrl="http://iliat.org/register/?" ApiUrl="http://iliat.org/register/api/register/?" />
+  <CourseUrl Name="GMAT" RegUrl="http://iliat.org/register_gmat/?" ApiUrl="http://iliat.org/register_gmat/api/register/?"/>
+  <CourseUrl Name="GRE" RegUrl="http://iliat.org/register_gre/?" ApiUrl="http://iliat.org/register_gre/api/register/?"/>
+  <CourseUrl Name="CFA" RegUrl="http://iliat.org/register_cfa?" ApiUrl="http://iliat.org/register_cfa/api/register/?"/>
+</CourseUrlList>

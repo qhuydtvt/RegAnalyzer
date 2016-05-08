@@ -10,10 +10,12 @@ namespace RegAnalyzer.ViewModels
 {
     public class MainVM : BaseVM
     {
+        public CourseUrlListVM CourseUrlListVM { get; private set; }
         public CampaignListVM CampaignListVM { get; private set; }
         public RegisterInsightVM RegisterInsightVM { get; private set; }
         public CampaignVM SelectedCampaignVM { get; private set; }
-        public ClickCountData ClickCountData { get; private set; }
+        public ClickCountVM ClickCountVM { get; private set; }
+
 
         public ICommand CmdLoadRegisterData { get; private set; }
         public bool LoadRegisterDataEnabled
@@ -26,9 +28,11 @@ namespace RegAnalyzer.ViewModels
         
         public MainVM()
         {
+            CourseUrlListVM = new CourseUrlListVM();
             CampaignListVM = new CampaignListVM();
             RegisterInsightVM = new RegisterInsightVM();
-            ClickCountData = ClickCountData.Inst;
+            ClickCountVM = new ClickCountVM();
+            //ClickCountData = ClickCountData.Inst;
             CmdLoadRegisterData = new RelayCommand((obj) =>
             {
                 if(CampaignListVM.SeletedCampaignVM == null)
@@ -36,8 +40,9 @@ namespace RegAnalyzer.ViewModels
                     _showMessagge("You must specify campaign first", "Load regsiter data");
                 } else {
                     RegisterInsightVM.Load(CampaignListVM.SeletedCampaignVM);
+                    ClickCountVM.Load(CampaignListVM.SeletedCampaignVM);
                     _notify("RegisterInsightVM");
-                    _notify("ClickCountData");
+                    _notify("ClickCountVM");
                 }
             });
         }
@@ -46,5 +51,6 @@ namespace RegAnalyzer.ViewModels
         {
             CampaignListVM.Save();
         }
+
     }
 }

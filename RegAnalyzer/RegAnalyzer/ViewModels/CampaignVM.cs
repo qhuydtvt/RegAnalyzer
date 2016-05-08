@@ -110,17 +110,24 @@ namespace RegAnalyzer.ViewModels
 
             //CampaignUrlVMs = new ObservableCollection<CampaignUrlVM>(campaignUrlVMs);
 
-            campaign.CampaignUrls.Clear();
-
-            foreach (CampaignUrl campaignUrl in campaignUrlCollection)
+            try
             {
-                CampaignUrl.GenerateUrls(campaignUrl,campaign.Name);
-                campaign.CampaignUrls.Add(campaignUrl);
-            }
-            campaignUrlCollection = new ObservableCollection<CampaignUrl>(campaign.CampaignUrls);
+                campaign.CampaignUrls.Clear();
 
-            _notify("UrlsString");
-            _notify("CampaignUrlCollection");
+                foreach (CampaignUrl campaignUrl in campaignUrlCollection)
+                {
+                    CampaignUrl.GenerateUrls(campaignUrl, campaign.Name);
+                    campaign.CampaignUrls.Add(campaignUrl);
+                }
+                campaignUrlCollection = new ObservableCollection<CampaignUrl>(campaign.CampaignUrls);
+
+                _notify("UrlsString");
+                _notify("CampaignUrlCollection");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(" " + e.Message);
+            }
         }
     }
 }

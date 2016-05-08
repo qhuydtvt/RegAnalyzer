@@ -71,16 +71,25 @@ namespace RegAnalyzer.Models
         public static String ClassifyTime(RegisterData data)
         {
             CultureInfo cultureInfo = CultureInfo.InvariantCulture;
-            
-            DateTime datetime = DateTime.ParseExact(data.SubmittedTime.Split(' ').Last(), TIME_FORMAT, cultureInfo,DateTimeStyles.None);
-
-            for (int hour = 0; hour <= 23; hour += TIME_INTERVAL)
+            String timeOnly = (from s in data.SubmittedTime.Trim().Split(' ')
+                               where s != ""
+                              select s).Last();
+            try
             {
-                if (hour <= datetime.Hour && datetime.Hour < hour + TIME_INTERVAL)
+                //DateTime datetime = DateTime.ParseExact(timeOnly, TIME_FORMAT, null, DateTimeStyles.None);
+
+                string[] timeArray = timeOnly.Split(':');
+                int submitted_hour = Int32.Parse(timeArray[0]);
+                for (int hour = 0; hour <= 23; hour += TIME_INTERVAL)
                 {
-                    return String.Format("{0}-{1} h", hour, hour + TIME_INTERVAL);
+                    if (hour <= submitted_hour && submitted_hour < hour + TIME_INTERVAL)
+                    {
+                        return String.Format("{0}-{1} h", hour, hour + TIME_INTERVAL);
+                    }
+
                 }
             }
+            catch(Exception ex) { }
             return "";
         }
     }

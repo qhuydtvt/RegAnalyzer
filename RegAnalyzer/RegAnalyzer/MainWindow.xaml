@@ -21,7 +21,7 @@
             <TabItem Header="Campaign">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>    
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid>
@@ -30,13 +30,18 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Grid Grid.Column="0">
+                        <Grid Grid.Column="0" Grid.Row="0" >
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <Border Padding="4" Grid.Row="0" BorderThickness="0" 
+                                <Grid Grid.Row="0">
+                                    <ComboBox DataContext="{Binding CourseUrlListVM}" ItemsSource="{Binding CourseUrls}" DisplayMemberPath="Name"
+                                              SelectedIndex="0" SelectedValue="{Binding SelectedCourseUrl}"/>
+                                </Grid>
+                                <Border Padding="4" Grid.Row="1" BorderThickness="0" 
                                     DataContext="{Binding CampaignListVM}">
                                     <StackPanel Orientation="Vertical">
                                         <TextBox MinWidth="150" Text="{Binding CampaignNameInput}" Margin="0,2"/>
@@ -45,15 +50,14 @@
                                         <Button Content="Remove"  MinWidth="70" MaxWidth="100" Margin="0,2"/>
                                     </StackPanel>
                                 </Border>
-
                                 <ListView Name="ltvCampaign"
-                                    Grid.Row="1" DataContext="{Binding CampaignListVM}"
+                                    Grid.Row="2" DataContext="{Binding CampaignListVM}"
                                           ItemsSource="{Binding VMs}"
                                           DisplayMemberPath="Name">
                                 </ListView>
                             </Grid>
                         </Grid>
-                        <Grid Grid.Column="1" DataContext="{Binding SelectedValue, ElementName=ltvCampaign}">
+                        <Grid Grid.Column="1" Grid.Row="0"  DataContext="{Binding SelectedValue, ElementName=ltvCampaign}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
@@ -82,7 +86,18 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+                        <Label Content="Select Course" Margin="10,0"/>
+
+                        <ComboBox Name="cbxCourse" Margin="10,0"
+                              DataContext="{Binding CourseUrlListVM}"
+                              ItemsSource="{Binding CourseUrls}"
+                              SelectedIndex="0"
+                              SelectedValue="{Binding SelectedCourseUrl}"
+                                  MinWidth="120"
+                              DisplayMemberPath="Name">
+                        </ComboBox>
                         <Label Content="Select campaign" Margin="10,0"/>
+                        
                         <ComboBox Name="cbxCampaign" Margin="10,0"
                               DataContext="{Binding CampaignListVM}"
                               ItemsSource="{Binding VMs}"
@@ -95,10 +110,9 @@
                                 MinWidth="240"
                                 Command="{Binding CmdLoadRegisterData}"/>
                     </StackPanel>
-                    
-
+   
                     <TabControl Grid.Row="1">
-                        <TabItem Header="Statistics" DataContext="{Binding RegisterInsightVM}">
+                        <TabItem Header="Sources" DataContext="{Binding RegisterInsightVM}">
                             <ScrollViewer HorizontalScrollBarVisibility="Disabled">
                                 <Grid>
                                 <Grid.ColumnDefinitions>
@@ -174,10 +188,16 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Top"
-                                        DataContext="{Binding ClickCountData,Mode=OneWay}">
-                                    <Label Content="Click counts:"/>
-                                    <Label Content="{Binding Count}"/>
+                                <StackPanel Orientation="Horizontal" Height="30"
+                                            VerticalAlignment="Top" >
+                                    <TextBlock Text="Click counts:" FontSize="18" Margin="5" Foreground="Red"/>
+                                    <TextBlock DataContext="{Binding ClickCountVM,Mode=OneWay}" FontSize="18" Margin="5" Foreground="Red"
+                                           Text="{Binding ClickCount}"/>
+                                    <TextBlock Text="|" FontSize="18" Margin="5" />
+                                    <TextBlock Text="Submission counts:" FontSize="18" Margin="5" Foreground="Green"
+                                               />
+                                    <TextBlock DataContext="{Binding RegisterInsightVM,Mode=OneWay}" FontSize="18" Margin="5" Foreground="Green"
+                                           Text="{Binding SubmissionCount}" />
                                 </StackPanel>
                                 <charing:Chart Title="Submitted time" MinHeight="300" DataContext="{Binding RegisterInsightVM}">
                                     <charing:ColumnSeries ItemsSource="{Binding RegisterStatsByTime, Mode=OneWay}"

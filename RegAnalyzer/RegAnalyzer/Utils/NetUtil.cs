@@ -5,21 +5,41 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using BitlyDotNET.Implementations;
+using RegAnalyzer.Models;
 
 namespace RegAnalyzer.Utils
 {
     public static class NetUtil
     {
-        public const string REG_ROOT = "http://iliat.org/register/?";
-        public const string API_URL_REGISTER_ROOT = "http://iliat.org/register/api/register/?";
-        public const string API_URL_CLICK_COUNT_ROOT = "http://iliat.org/register/api/register/count?";
-        public const string API_URL_CLICK_COUNT_PARAMS = "campaign=?";
+        //public static string REG_ROOT = "http://iliat.org/register/?";
+        //public static string API_URL_REGISTER_ROOT = "http://iliat.org/register/api/register/?";    
+        //public static string API_URL_CLICK_COUNT_ROOT = "http://iliat.org/register/api/click_counts/?";
+
+        public static string REG_ROOT
+        {
+            get
+            {
+                return CourseUrlList.Inst.SelectedCourseUrl.RegUrl;
+            }
+        }
+        public static string API_URL_REGISTER_ROOT
+        {
+            get
+            {
+                return CourseUrlList.Inst.SelectedCourseUrl.ApiUrl;
+            }
+        }
+
+        public static string API_URL_CLICK_COUNT_ROOT = "http://iliat.org/register/api/click_counts/?";
+
+        public const string API_URL_CLICK_COUNT_PARAMS = "campaign={0}";
         public const string API_FB_AUTH_ROOT = "https://graph.facebook.com/oauth/access_token?";
 
-        public const string API_URL_CLICK_COUNT_FORMAT = "http://iliat.org/register/api/register/click_counts?" + API_URL_CLICK_COUNT_PARAMS;
+        public const string API_URL_CLICK_COUNT_FORMAT = "http://iliat.org/register/api/click_counts/?" + API_URL_CLICK_COUNT_PARAMS;
 
-        public const string API_URL_REGISTER_DATA_FORMAT = API_URL_REGISTER_ROOT + "campaign={0}";
-        public const string REG_URL_FORMAT = REG_ROOT + "source={1}&source_type={2}&campaign={0}";
+        public static string API_URL_REGISTER_DATA_FORMAT { get { return API_URL_REGISTER_ROOT + "campaign={0}"; } }
+        public static string REG_URL_FORMAT { get { return REG_ROOT + "source={1}&source_type={2}&campaign={0}"; } }
+
         public const string API_FB_AUTH_FORMAT = API_FB_AUTH_ROOT + "client_id={0}&client_secret={1}&grant_type=client_credentials";
 
         public const string APP_ID = "1097955463600030";
@@ -83,15 +103,20 @@ namespace RegAnalyzer.Utils
 
         public static String DownloadCampaignWebpage(String campaignName)
         {
-            return DownloadHTMLInnerText(BuildAPIUrlFromCampaignName(campaignName.ToLower()));
+            return DownloadHTMLInnerText(BuildAPIRegDataUrl(campaignName.ToLower()));
         }
 
-        public static String DownloadClickCountsFromAPI(String campaignName)
+        public static String DownloadClickCountWebpage(String campaignName)
         {
-            return DownloadHTMLInnerText(string.Format(API_URL_CLICK_COUNT_FORMAT, campaignName));
+            return DownloadHTMLInnerText(BuildClickCountAPIUrl(campaignName));
         }
 
-        public static string BuildAPIUrlFromCampaignName(string campaignName)
+        public static String BuildClickCountAPIUrl(String campaignName)
+        {
+            return string.Format(API_URL_CLICK_COUNT_FORMAT, campaignName.ToLower());
+        }
+
+        public static string BuildAPIRegDataUrl(string campaignName)
         {
             return string.Format(API_URL_REGISTER_DATA_FORMAT, campaignName.ToLower());
         }
